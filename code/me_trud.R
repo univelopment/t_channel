@@ -7,16 +7,7 @@ library("ggplot2")
 library("forcats")
 
 # Prepare data ----
-d <- data.frame(district = c("Уральский федеральный округ", "Приволжский федеральный округ",
-                             "Северо-Западный федеральный округ", "г. Санкт-Петербург",
-                             "Сибирский федеральный округ", "Центральный федеральный округ",
-                             "Дальневосточный федеральный округ", "г. Москва",
-                             "Южный федеральный округ", "Северо-Кавсказский федеральный округ"),
-                employed = c(0.82, 0.82, 0.81, 0.79, 0.77, 
-                             0.76, 0.76, 0.75, 0.74, 0.56),
-                threshold = c(0.75, 0.8, 0.8, 0.7, 0.75,
-                              0.75, 0.7, 0.7, 0.7, 0.45),
-                stringsAsFactors = FALSE)
+d <- read.csv("data/trud_district.csv", stringsAsFactors = FALSE)
 
 # Get the unemployment fraction
 d$unemployed <- 1 - d$employed
@@ -59,7 +50,7 @@ distr_empl <- ggplot(data = dm, aes(x = district, y = value, fill = variable)) +
 distr_empl
 
 # Save plot
-ggsave("me_trud_plots/stacked_bar.png", distr_empl, width = 12, height = 6, units = "in")
+ggsave("me_trud_after/stacked_bar.png", distr_empl, width = 12, height = 6, units = "in")
 
 # Facet pie ----
 distr_empl_pie <- ggplot(data = dm, aes(x = 1, y = value, fill = variable)) +
@@ -93,7 +84,7 @@ distr_empl_pie <- ggplot(data = dm, aes(x = 1, y = value, fill = variable)) +
 distr_empl_pie
 
 # Save plot
-ggsave("me_trud_plots/pie.png", distr_empl_pie, width = 12, height = 6, units = "in")
+ggsave("me_trud_after/pie.png", distr_empl_pie, width = 12, height = 6, units = "in")
 
 # Facet dodge ----
 distr_empl_dodge <- ggplot(data = dm, aes(x = fct_rev(variable), y = value, fill = variable)) +
@@ -103,7 +94,7 @@ distr_empl_dodge <- ggplot(data = dm, aes(x = fct_rev(variable), y = value, fill
             family = "Roboto",
             color = "white",
             size = 5,
-            vjust = 1.2) +
+            vjust = 1.3) +
   scale_fill_manual(name = "", 
                     values = c("#7D9C9F", "#3D4935"),
                     labels = c("Не трудоустроено", "Трудоустроено")) +
@@ -127,4 +118,4 @@ distr_empl_dodge <- ggplot(data = dm, aes(x = fct_rev(variable), y = value, fill
 distr_empl_dodge
 
 # Save plot
-ggsave("me_trud_plots/bar_dodge.png", distr_empl_dodge, width = 12, height = 6, units = "in")
+ggsave("me_trud_after/bar_dodge.png", distr_empl_dodge, width = 12, height = 6, units = "in")
