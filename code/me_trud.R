@@ -50,7 +50,7 @@ distr_empl <- ggplot(data = dm, aes(x = district, y = value, fill = variable)) +
 distr_empl
 
 # Save plot
-ggsave("me_trud_after/stacked_bar.png", distr_empl, width = 12, height = 6, units = "in")
+ggsave("plots/me_trud/stacked_bar.png", distr_empl, width = 12, height = 6, units = "in")
 
 # Facet pie ----
 distr_empl_pie <- ggplot(data = dm, aes(x = 1, y = value, fill = variable)) +
@@ -84,7 +84,7 @@ distr_empl_pie <- ggplot(data = dm, aes(x = 1, y = value, fill = variable)) +
 distr_empl_pie
 
 # Save plot
-ggsave("me_trud_after/pie.png", distr_empl_pie, width = 12, height = 6, units = "in")
+ggsave("plots/me_trud/pie.png", distr_empl_pie, width = 12, height = 6, units = "in")
 
 # Facet dodge ----
 distr_empl_dodge <- ggplot(data = dm, aes(x = fct_rev(variable), y = value, fill = variable)) +
@@ -118,4 +118,4 @@ distr_empl_dodge <- ggplot(data = dm, aes(x = fct_rev(variable), y = value, fill
 distr_empl_dodge
 
 # Save plot
-ggsave("me_trud_after/bar_dodge.png", distr_empl_dodge, width = 12, height = 6, units = "in")
+ggsave("plots/me_trud/bar_dodge.png", distr_empl_dodge, width = 12, height = 6, units = "in")

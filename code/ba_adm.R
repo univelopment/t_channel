@@ -5,7 +5,7 @@ d <- read.csv("data/ba_adm.csv", stringsAsFactors = FALSE)
 d$category <- fct_relevel(factor(d$category), "Заочная", "Очно-заочная")
 
 # Special helper function to add spaces in large numbers: 10000 - > 10 000 ----
-formatSpace <- function(vect) {
+format_space <- function(vect) {
   vect <- format(vect, big.mark = " ", scientific = FALSE, trim = TRUE)
   return(vect)
 }
@@ -48,7 +48,7 @@ ba_adm_before <- ggplot(data = d, aes(x = broader.spec, y = n_adm, fill = catego
 ba_adm_before
 
 # Save plot
-ggsave("ba_adm/ba_adm_before.png", ba_adm_before, width = 12, height = 8, units = "in")
+ggsave("plots/ba_adm/ba_adm_before.png", ba_adm_before, width = 12, height = 8, units = "in")
 
 # The AFTER plot ----
 ba_adm_after <- ggplot(data = d, aes(x = category, y = n_adm, fill = category)) +
@@ -89,4 +89,4 @@ ba_adm_after <- ggplot(data = d, aes(x = category, y = n_adm, fill = category)) 
 ba_adm_after
 
 # Save plot
-ggsave("ba_adm/ba_adm_after.png", ba_adm_after, width = 12, height = 8, units = "in")
+ggsave("plots/ba_adm/ba_adm_after.png", ba_adm_after, width = 12, height = 8, units = "in")
