@@ -1,19 +1,22 @@
+# Average USE time series
+
+# Original plot and data source
+# https://ege.hse.ru/stata
+
+# Load libraries ----
 library("dplyr")
 library("reshape2")
 library("ggplot2")
 library("grid")  # for plots arrangement
 
-# Original plot and data source
-# https://ege.hse.ru/stata
-
-# Load data ----
-d <- read.csv("data/use_dynam.csv", stringsAsFactors = FALSE)
-
-# Special helper function to add spaces in large numbers: 10000 - > 10 000 ----
+# Special helper function to add spaces in large numbers: 10000 - > 10 000
 format_space <- function(vect) {
   vect <- format(vect, big.mark = " ", scientific = FALSE, trim = TRUE)
   return(vect)
 }
+
+# Load data ----
+d <- read.csv("data/use_dynam.csv", stringsAsFactors = FALSE)
 
 # Create separate dataset for USE and transform it to long format ----
 d_use <- d %>%
@@ -25,7 +28,7 @@ d_adm <- d %>%
   select(year, adm_bud, adm_pr) %>%
   melt(id = "year")
 
-# USE plot ----
+# USE time series plot ----
 use_ts <- ggplot(data = d_use, aes(x = year, y = value, color = variable)) +
   geom_line() +
   geom_point() +
@@ -99,12 +102,14 @@ grid.draw(rbind(grU, grA))
 dev.off()
 
 # Admission structure ----
+
+# Prepare initial data. Calculate fractions
 d_adm_str <- d_adm %>%
   mutate(year = factor(year)) %>%
   group_by(year) %>%
   mutate(fracts = value/sum(value))
 
-# Total number of admitted students
+# Additional dataset with total number of admitted students
 d_tot_adm <- d_adm %>%
   mutate(year = factor(year)) %>%
   group_by(year) %>%
@@ -151,49 +156,8 @@ adm_str_pl_1
 
 ggsave("plots/use_ts/use_struct_correct.png", adm_str_pl_1, width = 12, height = 8, units = "in")
 
-# Wrong way
+# Not so correct and not so useful way to display dynamics
 adm_str_pl_2 <- ggplot(data = d_adm_str, aes(x = year, y = value, fill = variable)) +
-  geom_bar(stat = "identity", color = "white", width = 0.8, alpha = 0.55) +
-  geom_text(aes(label = paste0(round(100 * fracts, 0), "%")),
-            position = position_stack(vjust = 0.5),
-            family = "Roboto",
-            size = 6,
-            color = "white") +
-  geom_text(data = d_tot_adm,
-            aes(x = year,
-                y = tot_numb,
-                fill = NULL,
-                label = paste0("Всего:\n", format_space(tot_numb)),
-                vjust = -0.1),
-            family = "Roboto",
-            size = 6,
-            color = "grey30") +
-  scale_y_continuous(breaks = seq(0, 450000, 150000),
-                     labels = format_space,
-                     limits = c(0, 480000)) +
-  scale_fill_manual(name = "",
-                    labels = c("Бюджетные места", "Платные места"),
-                    values = c("#D95B43", "#53777A")) +
-  labs(title = "ПЛОХОЙ СПОСОБ показать изменение структуры приёма",
-       y = "Число принятых абитуриентов, человек",
-       x = "") +
-  theme(axis.text = element_text(size = 16, family = "PT Sans", color = "grey30"),
-        axis.title = element_text(size = 16, family = "PT Sans", color = "grey30"),
-        axis.ticks = element_blank(),
-        axis.line = element_line(color = "grey30", linetype = "dotted"),
-        plot.title = element_text(size = 22, family = "PT Sans", color = "grey30", hjust = 0.5),
-        legend.position = "bottom",
-        legend.key = element_blank(),
-        legend.text = element_text(size = 16, family = "PT Sans", color = "grey30"),
-        legend.box.margin = margin(t = -15, unit = "pt"),
-        panel.background = element_blank())
-
-adm_str_pl_2
-
-ggsave("plots/use_ts/use_struct_wrong.png", adm_str_pl_2, width = 12, height = 8, units = "in")
-
-# Correct but not so useful way
-adm_str_pl_3 <- ggplot(data = d_adm_str, aes(x = year, y = value, fill = variable)) +
   geom_bar(stat = "identity", color = "white", width = 0.8, alpha = 0.55) +
   geom_text(aes(label = format_space(value)),
             position = position_stack(vjust = 0.5),
@@ -215,8 +179,53 @@ adm_str_pl_3 <- ggplot(data = d_adm_str, aes(x = year, y = value, fill = variabl
   scale_fill_manual(name = "",
                     labels = c("Бюджетные места", "Платные места"),
                     values = c("#D95B43", "#53777A")) +
-  labs(title = "Изменение структуры приёма",
+  labs(title = "ВВОДЯЩИЙ В ЗАБЛУЖДЕНИЕ способ показать\nизменение структуры приёма",
        y = "Число принятых абитуриентов, человек",
+       x = "") +
+  theme(axis.text = element_text(size = 16, family = "PT Sans", color = "grey30"),
+        axis.title = element_text(size = 16, family = "PT Sans", color = "grey30"),
+        axis.ticks = element_blank(),
+        axis.line = element_line(color = "grey30", linetype = "dotted"),
+        plot.title = element_text(size = 22, family = "PT Sans", color = "grey30", hjust = 0.5),
+        legend.position = "bottom",
+        legend.key = element_blank(),
+        legend.text = element_text(size = 16, family = "PT Sans", color = "grey30"),
+        legend.box.margin = margin(t = -15, unit = "pt"),
+        panel.background = element_blank())
+
+adm_str_pl_2
+
+ggsave("plots/use_ts/use_struct_not_quite_correct_and_useful.png", adm_str_pl_2, width = 12, height = 8, units = "in")
+
+
+
+# Not so correct and not so useful way to display dynamics
+adm_str_pl_3 <- ggplot(data = d_adm_str, aes(x = fct_rev(year), y = fracts, fill = variable)) +
+  geom_bar(stat = "identity", color = "white", width = 0.8, alpha = 0.55) +
+  geom_text(aes(label = paste0(format_space(value), " = ", round(100 * fracts, 0), "%")),
+            position = position_stack(vjust = 0.5),
+            family = "Roboto",
+            angle = 45,
+            size = 6,
+            color = "white") +
+  geom_text(data = d_tot_adm,
+            aes(x = year,
+                y = 1,
+                fill = NULL,
+                label = paste0("Всего:\n", format_space(tot_numb))),
+            family = "Roboto",
+            size = 6,
+            color = "grey30",
+            vjust = -0.1) +
+  # coord_flip() +
+  scale_y_continuous(breaks = seq(0, 1, 0.25),
+                     labels = seq(0, 100, 25),
+                     limits = c(0, 1.05)) +
+  scale_fill_manual(name = "",
+                    labels = c("Бюджетные места", "Платные места"),
+                    values = c("#D95B43", "#53777A")) +
+  labs(title = "Изменение структуры приёма",
+       y = "Доля, %",
        x = "") +
   theme(axis.text = element_text(size = 16, family = "PT Sans", color = "grey30"),
         axis.title = element_text(size = 16, family = "PT Sans", color = "grey30"),
@@ -231,4 +240,4 @@ adm_str_pl_3 <- ggplot(data = d_adm_str, aes(x = year, y = value, fill = variabl
 
 adm_str_pl_3
 
-ggsave("plots/use_ts/use_struct_not_quite_useful.png", adm_str_pl_3, width = 12, height = 8, units = "in")
+ggsave("plots/use_ts/use_struct_abs_rel.png", adm_str_pl_3, width = 12, height = 8, units = "in")

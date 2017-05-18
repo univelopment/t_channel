@@ -1,10 +1,16 @@
+# BA admission plots
+
+# Load libraries ----
+library("ggplot2")
+library("forcats")
+
 # Load data ----
 d <- read.csv("data/ba_adm.csv", stringsAsFactors = FALSE)
 
 # For correct order of bars
 d$category <- fct_relevel(factor(d$category), "Заочная", "Очно-заочная")
 
-# Special helper function to add spaces in large numbers: 10000 - > 10 000 ----
+# Special helper function to add spaces in large numbers: 10000 - > 10 000
 format_space <- function(vect) {
   vect <- format(vect, big.mark = " ", scientific = FALSE, trim = TRUE)
   return(vect)
@@ -13,7 +19,7 @@ format_space <- function(vect) {
 # The BEFORE plot ----
 ba_adm_before <- ggplot(data = d, aes(x = broader.spec, y = n_adm, fill = category)) +
   geom_bar(position = position_dodge(width = 0.9), color = "white", size = 0.8, stat = "identity") +
-  geom_text(aes(label = formatSpace(n_adm),
+  geom_text(aes(label = format_space(n_adm),
                 vjust = 0.5, 
                 hjust = -0.08), 
             position = position_dodge(width = 0.9), 
@@ -53,7 +59,7 @@ ggsave("plots/ba_adm/ba_adm_before.png", ba_adm_before, width = 12, height = 8, 
 # The AFTER plot ----
 ba_adm_after <- ggplot(data = d, aes(x = category, y = n_adm, fill = category)) +
   geom_bar(stat = "identity", width = 0.85) +
-  geom_text(aes(label = formatSpace(n_adm), 
+  geom_text(aes(label = format_space(n_adm), 
                 hjust = dplyr::if_else(n_adm > 200000, 1.1, -0.15)),
             color = "grey30",
             family = "Roboto",
