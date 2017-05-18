@@ -156,6 +156,7 @@ adm_str_pl_1
 
 ggsave("plots/use_ts/use_struct_correct.png", adm_str_pl_1, width = 12, height = 8, units = "in")
 
+
 # Not so correct and not so useful way to display dynamics
 adm_str_pl_2 <- ggplot(data = d_adm_str, aes(x = year, y = value, fill = variable)) +
   geom_bar(stat = "identity", color = "white", width = 0.8, alpha = 0.55) +
@@ -198,8 +199,7 @@ adm_str_pl_2
 ggsave("plots/use_ts/use_struct_not_quite_correct_and_useful.png", adm_str_pl_2, width = 12, height = 8, units = "in")
 
 
-
-# Not so correct and not so useful way to display dynamics
+# Absolute and relative data on one plot
 adm_str_pl_3 <- ggplot(data = d_adm_str, aes(x = fct_rev(year), y = fracts, fill = variable)) +
   geom_bar(stat = "identity", color = "white", width = 0.8, alpha = 0.55) +
   geom_text(aes(label = paste0(format_space(value), " = ", round(100 * fracts, 0), "%")),
