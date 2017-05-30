@@ -8,6 +8,7 @@ library("dplyr")
 library("reshape2")
 library("ggplot2")
 library("grid")  # for plots arrangement
+library("gridExtra")  # for plots arrangement
 
 # Special helper function to add spaces in large numbers: 10000 - > 10 000
 format_space <- function(vect) {
