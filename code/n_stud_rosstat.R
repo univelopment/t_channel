@@ -55,7 +55,6 @@ ggsave("plots/adm_gks/adm_gks_v1.png", adm_gks_no_prop, width = 3, height = 3, u
 # V2: now focus on them! ----
 
 # Add frequency to data, cause we can't simply retreive it using position_fill inside geom_bar
-# Also move 'Mestniy budget' on top to display it at least somehow
 adm_gks_sum <- adm_gks_sum %>%
   group_by(level) %>%
   mutate(freq = n_stud/sum(n_stud))
