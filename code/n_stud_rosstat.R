@@ -108,7 +108,7 @@ adm_gks_prop <- ggplot(adm_gks_sum, aes(x = level, y = freq, fill = finance)) +
         axis.text.y = element_text(family = "Roboto Condensed", size = 13, color = "grey30"))
 
 
-# Now add some explaining text blow legend ----
+# Now add some explaining text under legend ----
 # Epic solution for adding text below legend by Sandy Muspratt ----
 # https://stackoverflow.com/questions/32506444/ggplot-function-to-add-text-just-below-legend
 
@@ -135,8 +135,8 @@ height <- unit(1, "grobheight", textgrob) + unit(2 * xpos, "points")
 pos <- subset(leg$layout, grepl("guides", name), t:r)
 
 # Add new text as new row in the legend
-leg <- gtable_add_rows(leg, height, pos = pos$t+1)
-leg <- gtable_add_grob(leg, textgrob, t = pos$t+2, l = pos$l)
+leg <- gtable_add_rows(leg, height, pos = pos$t + 1)
+leg <- gtable_add_grob(leg, textgrob, t = pos$t + 2, l = pos$l)
 
 # Adjust the middle width of the legend to be the maximum of the original width 
 # or the width of the grob
