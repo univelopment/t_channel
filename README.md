@@ -15,3 +15,6 @@
 
 - [Цветовая палитра](http://telegra.ph/Cvetovaya-palitra-vuzovskih-logotipov-05-26) логотипов российских вузов
 
+
+- [Bar chart vs dot plot](http://telegra.ph/Dot-plot-vs-bar-chart-06-26)
+
